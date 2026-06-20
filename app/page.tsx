@@ -18,9 +18,14 @@ export default function Page() {
   const [calories, setCalories] = useState<number>(0)
 
   const [foodCals, setfoodCals] = useState<FoodCals[]>([])
+  const [totalCalories, setTotalCalories] = useState<number>(0)
 
-  const AddItem = (item:FoodCals) => {
-    setfoodCals([...foodCals,{food:item.food, calories:item.calories}])
+  const AddItem = (item: FoodCals) => {
+    setfoodCals([...foodCals, { food: item.food, calories: item.calories }])
+    const tc = foodCals.reduce(
+      (sum, item) => sum + item.calories, 0
+    )
+    setTotalCalories(tc)
   }
 
   return (
@@ -39,7 +44,7 @@ export default function Page() {
               <FieldLabel htmlFor="calories">Calories</FieldLabel>
               <Input id="calories" placeholder="Calories" type="number" value={calories} onChange={(e) => setCalories(Number(e.target.value))} />
             </Field>
-            <Button onClick={() => AddItem({food:food, calories:calories})} >Add Food</Button>
+            <Button onClick={() => AddItem({ food: food, calories: calories })} >Add Food</Button>
           </FieldGroup>
           <Separator className="my-3" />
           <Table>
@@ -51,7 +56,7 @@ export default function Page() {
               </TableRow>
               {
                 foodCals.map(item => (
-                   <TableRow key={item.food}>
+                  <TableRow key={item.food}>
                     <TableCell>{item.food}</TableCell>
                     <TableCell>{item.calories}</TableCell>
                     <TableCell>Edit</TableCell>
@@ -63,7 +68,10 @@ export default function Page() {
           </Table>
         </CardContent>
         <CardFooter>
-          <CardTitle>Total Calories 0</CardTitle>
+          <CardTitle>Total Calories {foodCals.reduce(
+            (sum, item) => sum + item.calories,
+            0
+          )}</CardTitle>
         </CardFooter>
       </Card>
     </div>
